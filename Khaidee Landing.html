@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>เงินร้าน — ผู้ช่วยจัดระเบียบการเงินร้านสำหรับแม่ค้าไทย</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060a17;
+    --bg-2: #0a1024;
+    --surface: #0e1530;
+    --surface-2: #131a3a;
+    --line: rgba(255,255,255,0.07);
+    --line-2: rgba(255,255,255,0.12);
+    --text: #e8ecf7;
+    --text-dim: #8a92ad;
+    --text-dimmer: #5b6486;
+    --accent: #ff8a3d;
+    --accent-2: #ffb070;
+    --accent-deep: #ff6a1a;
+    --accent-glow: 255, 138, 61;
+    --blue-glow: 70, 110, 255;
+    --green: 92, 200, 138;
+    --red: 235, 100, 100;
+    --radius: 14px;
+    --radius-lg: 22px;
+    --maxw: 1240px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans Thai', 'Space Grotesk', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: rgba(var(--accent-glow), 0.4); color: #fff; }
+
+  .bg-fx { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .bg-fx::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.3) 50%, transparent 80%);
+  }
+  .glow { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; }
+  .glow.g1 { top: -200px; right: -100px; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(var(--accent-glow),0.55), transparent 60%); }
+  .glow.g2 { top: 500px; left: -150px; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(var(--blue-glow),0.4), transparent 60%); opacity: 0.35; }
+  .glow.g3 { top: 1800px; right: -100px; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(var(--accent-glow),0.3), transparent 60%); opacity: 0.4; }
+
+  .wrap { position: relative; z-index: 1; }
+  .container { max-width: var(--maxw); margin: 0 auto; padding: 0 32px; }
+
+  /* Nav ---------------------------------------------------------------- */
+  nav.top {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(18px);
+    background: rgba(6, 10, 23, 0.65);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+  }
+  .logo-mark {
+    width: 30px; height: 30px;
+    position: relative;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+    box-shadow: 0 0 24px rgba(var(--accent-glow), 0.5);
+    display: grid; place-items: center;
+    color: #fff;
+    font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .logo span.dot-accent { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 36px; font-size: 14px; color: var(--text-dim); }
+  .nav-links a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Buttons ------------------------------------------------------------ */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+    color: #1a0a00;
+    font-weight: 600;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.12) inset,
+      0 0 24px rgba(var(--accent-glow), 0.45),
+      0 8px 28px rgba(var(--accent-glow), 0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.2) inset,
+      0 0 32px rgba(var(--accent-glow), 0.6),
+      0 10px 32px rgba(var(--accent-glow), 0.45);
+  }
+  .btn-ghost { background: transparent; color: var(--text); border-color: var(--line-2); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.2); }
+  .btn-lg { padding: 14px 24px; font-size: 15px; border-radius: 12px; }
+  .arrow { width: 14px; height: 14px; display: inline-block; }
+
+  /* Hero --------------------------------------------------------------- */
+  .hero {
+    padding: 70px 0 40px;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+  }
+  .hero-text { max-width: 580px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 6px 14px 6px 6px;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--text-dim);
+    background: rgba(255,255,255,0.02);
+    margin-bottom: 28px;
+  }
+  .eyebrow b {
+    background: rgba(var(--accent-glow),0.15);
+    color: var(--accent-2);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  h1.hero-title {
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-weight: 600;
+    font-size: clamp(38px, 5.2vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin: 0 0 22px;
+    text-wrap: balance;
+  }
+  .hero-title .glow-text {
+    background: linear-gradient(180deg, #fff 0%, var(--accent-2) 55%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 24px rgba(var(--accent-glow),0.35));
+  }
+  .hero-sub {
+    color: var(--text-dim);
+    font-size: 18px;
+    line-height: 1.65;
+    margin: 0 0 32px;
+    text-wrap: pretty;
+  }
+  .hero-cta { display: flex; gap: 12px; align-items: center; margin-bottom: 26px; flex-wrap: wrap; }
+  .hero-meta {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-dimmer);
+  }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .check {
+    color: var(--accent); display: inline-block; width: 14px; height: 14px;
+  }
+
+  /* Phone mockup ------------------------------------------------------- */
+  .phone-stage {
+    position: relative;
+    height: 700px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .phone-stage::before {
+    content: "";
+    position: absolute; inset: -50px;
+    background: radial-gradient(ellipse at center,
+      rgba(var(--accent-glow), 0.4) 0%,
+      rgba(var(--accent-glow), 0.1) 35%,
+      transparent 65%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+  .phone {
+    position: relative;
+    width: 320px;
+    height: 650px;
+    background: linear-gradient(180deg, #1c2548 0%, #0d1330 100%);
+    border-radius: 46px;
+    padding: 12px;
+    box-shadow:
+      0 0 0 2px rgba(255,255,255,0.06),
+      0 30px 80px rgba(0,0,0,0.6),
+      0 0 60px rgba(var(--accent-glow), 0.2);
+    z-index: 2;
+  }
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #0a1024 0%, #060a17 100%);
+    border-radius: 36px;
+    overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column;
+  }
+  .phone-notch {
+    position: absolute;
+    top: 8px; left: 50%; transform: translateX(-50%);
+    width: 90px; height: 24px;
+    background: #000;
+    border-radius: 12px;
+    z-index: 3;
+  }
+  .phone-status {
+    display: flex; justify-content: space-between;
+    padding: 14px 24px 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
+  }
+  .phone-status .icons { display: flex; gap: 4px; align-items: center; opacity: 0.85; }
+
+  .phone-content {
+    padding: 24px 18px 18px;
+    flex: 1;
+    display: flex; flex-direction: column;
+    gap: 14px;
+    overflow: hidden;
+  }
+  .ph-greet {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-top: 12px;
+  }
+  .ph-greet .h {
+    font-size: 12px; color: var(--text-dimmer);
+  }
+  .ph-greet .n {
+    font-size: 16px; font-weight: 600; color: var(--text); margin-top: 2px;
+  }
+  .ph-greet .av {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    color: #1a0a00;
+    display: grid; place-items: center;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .ph-balance {
+    background: linear-gradient(135deg, rgba(var(--accent-glow), 0.18), rgba(var(--accent-glow), 0.04));
+    border: 1px solid rgba(var(--accent-glow), 0.25);
+    border-radius: 18px;
+    padding: 16px 18px;
+  }
+  .ph-balance .lbl {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .ph-balance .val {
+    font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .ph-balance .val .c { font-size: 16px; color: var(--text-dim); margin-right: 4px; vertical-align: top; line-height: 1.6; }
+  .ph-balance .meta {
+    margin-top: 8px;
+    display: flex; gap: 12px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .ph-balance .meta b { color: #6dd49a; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+
+  .ph-banks {
+    display: flex; gap: 8px;
+    overflow: hidden;
+  }
+  .ph-bank {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .ph-bank .b-row { display: flex; align-items: center; gap: 6px; }
+  .ph-bank .b-dot { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-weight: 700; font-size: 9px; color: #fff; font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; }
+  .ph-bank .b-dot.scb { background: #4f288c; }
+  .ph-bank .b-dot.kbk { background: #138f4a; }
+  .ph-bank .b-dot.bbl { background: #1a4ba8; }
+  .ph-bank .b-name { font-size: 10px; color: var(--text-dim); }
+  .ph-bank .b-val { font-size: 13px; font-weight: 600; color: var(--text); font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; letter-spacing: -0.01em; }
+
+  .ph-section-h {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin: 4px 2px 0;
+  }
+  .ph-section-h b { color: var(--text); font-weight: 600; font-size: 13px; }
+  .ph-section-h .see { color: var(--accent-2); font-size: 11px; }
+
+  .ph-txn-list { display: flex; flex-direction: column; gap: 8px; }
+  .ph-txn {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .ph-txn .ico {
+    width: 32px; height: 32px;
+    border-radius: 9px;
+    display: grid; place-items: center;
+    background: rgba(var(--green), 0.12);
+    color: #6dd49a;
+  }
+  .ph-txn.out .ico { background: rgba(var(--red), 0.12); color: #ec7878; }
+  .ph-txn .t-name { font-size: 12px; color: var(--text); font-weight: 500; }
+  .ph-txn .t-sub { font-size: 10px; color: var(--text-dimmer); margin-top: 1px; font-family: 'JetBrains Mono', monospace; }
+  .ph-txn .t-amt { font-size: 13px; font-weight: 600; color: #6dd49a; font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; }
+  .ph-txn.out .t-amt { color: #ec7878; }
+
+  .ph-tabbar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    padding: 12px 8px 16px;
+    border-top: 1px solid var(--line);
+    background: rgba(0,0,0,0.3);
+  }
+  .ph-tab {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-size: 9px; color: var(--text-dimmer);
+  }
+  .ph-tab.on { color: var(--accent-2); }
+  .ph-tab .add-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    display: grid; place-items: center;
+    color: #1a0a00;
+    margin-top: -10px;
+    box-shadow: 0 0 18px rgba(var(--accent-glow), 0.6);
+  }
+
+  /* Floating cards around phone */
+  .float-card {
+    position: absolute;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line-2);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(var(--accent-glow), 0.08);
+    z-index: 3;
+    backdrop-filter: blur(10px);
+  }
+  .fc-notif {
+    top: 50px; left: -40px;
+    width: 220px;
+    animation: floatY 4s ease-in-out infinite;
+  }
+  .fc-summary {
+    bottom: 80px; right: -50px;
+    width: 220px;
+    animation: floatY 5s ease-in-out infinite 1s;
+  }
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .fc-notif .nh {
+    display: flex; gap: 8px; align-items: center;
+    font-size: 11px; color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .fc-notif .nh .nd {
+    width: 20px; height: 20px; border-radius: 6px;
+    background: #138f4a;
+    color: #fff; font-weight: 700;
+    font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
+    display: grid; place-items: center;
+    font-size: 9px;
+  }
+  .fc-notif .title { color: var(--text); font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+  .fc-notif .amount { font-size: 18px; color: #6dd49a; font-weight: 600; font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; }
+  .fc-notif .from { font-size: 10px; color: var(--text-dimmer); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+
+  .fc-summary .hl { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
+  .fc-summary .ht { font-size: 13px; color: var(--text); font-weight: 600; margin-bottom: 8px; }
+  .fc-summary .mini-bars { display: flex; align-items: flex-end; gap: 4px; height: 36px; margin-bottom: 6px; }
+  .fc-summary .mini-bars i {
+    flex: 1;
+    background: linear-gradient(180deg, var(--accent), var(--accent-deep));
+    border-radius: 2px;
+    opacity: 0.85;
+  }
+  .fc-summary .mini-bars i:nth-child(1) { height: 40%; opacity: 0.4; }
+  .fc-summary .mini-bars i:nth-child(2) { height: 60%; opacity: 0.5; }
+  .fc-summary .mini-bars i:nth-child(3) { height: 50%; opacity: 0.5; }
+  .fc-summary .mini-bars i:nth-child(4) { height: 80%; opacity: 0.7; }
+  .fc-summary .mini-bars i:nth-child(5) { height: 70%; opacity: 0.7; }
+  .fc-summary .mini-bars i:nth-child(6) { height: 90%; opacity: 0.85; }
+  .fc-summary .mini-bars i:nth-child(7) { height: 100%; opacity: 1; }
+  .fc-summary .stat-row {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--text-dim);
+  }
+  .fc-summary .stat-row b { color: var(--text); font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; font-weight: 600; }
+
+  /* Trusted by ---------------------------------------------------------- */
+  .audience {
+    padding: 70px 0 30px;
+    text-align: center;
+  }
+  .audience-label {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dimmer);
+    margin-bottom: 32px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .audience-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+  }
+  .aud {
+    padding: 22px 16px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    transition: border-color 0.2s;
+  }
+  .aud:hover { border-color: rgba(var(--accent-glow), 0.3); }
+  .aud .icn {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(var(--accent-glow), 0.1);
+    color: var(--accent-2);
+    display: grid; place-items: center;
+  }
+  .aud .lbl { font-size: 13px; color: var(--text); font-weight: 500; text-align: center; }
+
+  /* Sections ----------------------------------------------------------- */
+  section { padding: 100px 0; position: relative; }
+  .sec-head {
+    text-align: center;
+    margin: 0 auto 60px;
+    max-width: 720px;
+  }
+  .sec-eyebrow {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--accent-2);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .sec-eyebrow::before { content: "[ "; color: var(--text-dimmer); }
+  .sec-eyebrow::after { content: " ]"; color: var(--text-dimmer); }
+  h2.sec-title {
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-weight: 600;
+    font-size: clamp(32px, 4.4vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  .sec-title em {
+    font-style: normal;
+    background: linear-gradient(180deg, var(--accent-2) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .sec-sub {
+    color: var(--text-dim);
+    font-size: 17px;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  /* Pain vs Solution comparison --------------------------------------- */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .compare-col {
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    border: 1px solid var(--line);
+  }
+  .compare-col.before {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+  }
+  .compare-col.after {
+    background: linear-gradient(180deg, rgba(var(--accent-glow),0.08) 0%, rgba(var(--accent-glow),0.01) 100%);
+    border-color: rgba(var(--accent-glow), 0.3);
+    box-shadow: 0 0 60px rgba(var(--accent-glow), 0.1);
+  }
+  .compare-col h3 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dimmer);
+  }
+  .compare-col.after h3 { color: var(--accent-2); }
+  .compare-col .h-line {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0 0 22px;
+    color: var(--text);
+  }
+  .compare-col.before .h-line { color: var(--text-dim); }
+  .compare-col ul {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .compare-col li {
+    display: flex; gap: 12px; align-items: flex-start;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .compare-col li .mk {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .compare-col.before li { color: var(--text-dim); }
+  .compare-col.before .mk { background: rgba(235, 100, 100, 0.12); color: #ec7878; }
+  .compare-col.after li { color: var(--text); }
+  .compare-col.after .mk { background: rgba(var(--accent-glow), 0.18); color: var(--accent-2); }
+
+  /* Features ----------------------------------------------------------- */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+  }
+  .feat {
+    grid-column: span 2;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 30px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .feat:hover {
+    border-color: rgba(var(--accent-glow), 0.35);
+    transform: translateY(-2px);
+  }
+  .feat.wide { grid-column: span 3; }
+  .feat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent-2);
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .feat-ico {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(var(--accent-glow), 0.2), rgba(var(--accent-glow), 0.05));
+    border: 1px solid rgba(var(--accent-glow), 0.25);
+    display: grid; place-items: center;
+    margin-bottom: 20px;
+    color: var(--accent-2);
+  }
+  .feat h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .feat p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .feat-visual {
+    margin-top: 22px;
+  }
+
+  /* feat visuals */
+  .multi-bank-mini { display: flex; flex-direction: column; gap: 6px; }
+  .mb-row {
+    display: grid; grid-template-columns: auto 1fr auto;
+    gap: 10px; align-items: center;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .mb-row .b-dot {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 11px;
+    font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
+  }
+  .mb-row .b-name { font-size: 13px; color: var(--text); }
+  .mb-row .b-acc { font-size: 11px; color: var(--text-dimmer); font-family: 'JetBrains Mono', monospace; margin-top: 1px; }
+  .mb-row .b-val { font-size: 14px; color: var(--text); font-weight: 600; font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; letter-spacing: -0.01em; }
+
+  .profit-pie-area {
+    display: grid; grid-template-columns: 90px 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .profit-pie {
+    position: relative;
+    width: 90px; height: 90px;
+  }
+  .profit-pie svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .profit-pie .center {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .legend-row {
+    display: flex; flex-direction: column; gap: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .legend-row .lg-item { display: flex; align-items: center; gap: 8px; }
+  .legend-row .sw { width: 10px; height: 10px; border-radius: 3px; }
+  .legend-row .sw.in { background: var(--accent); }
+  .legend-row .sw.out { background: rgba(255,255,255,0.2); }
+  .legend-row b { color: var(--text); font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; font-weight: 600; }
+
+  .month-bars {
+    display: flex; align-items: flex-end; gap: 6px;
+    height: 90px;
+    padding: 0 4px;
+  }
+  .month-bars i {
+    flex: 1;
+    background: linear-gradient(180deg, rgba(var(--accent-glow), 0.8), rgba(var(--accent-glow), 0.2));
+    border-radius: 3px 3px 0 0;
+    position: relative;
+  }
+  .month-bars i.live { background: linear-gradient(180deg, var(--accent), var(--accent-deep)); box-shadow: 0 0 12px rgba(var(--accent-glow), 0.6); }
+
+  .qr-pad {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    display: grid; grid-template-columns: 70px 1fr; gap: 14px; align-items: center;
+  }
+  .qr-grid {
+    width: 70px; height: 70px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+    gap: 2px;
+    background: #f5f1e8;
+    padding: 4px;
+    border-radius: 6px;
+  }
+  .qr-grid > i { background: #1a1a1a; border-radius: 1px; }
+  .qr-grid > i.off { background: transparent; }
+  .qr-info .ql { font-size: 11px; color: var(--text-dimmer); margin-bottom: 2px; }
+  .qr-info .qa {
+    font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
+    font-size: 20px; font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .qr-info .qb { font-size: 11px; color: #6dd49a; font-family: 'JetBrains Mono', monospace; margin-top: 4px; }
+
+  .ledger-mini {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex; flex-direction: column; gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+  .ledger-mini .l-row {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .ledger-mini .l-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .ledger-mini .l-row .desc { color: var(--text-dim); }
+  .ledger-mini .l-row .desc b { color: var(--text); font-family: 'IBM Plex Sans Thai'; font-weight: 500; }
+  .ledger-mini .l-row .v.in { color: #6dd49a; }
+  .ledger-mini .l-row .v.out { color: #ec7878; }
+
+  .seg-mini {
+    display: flex; gap: 8px;
+  }
+  .seg-card {
+    flex: 1;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .seg-card.shop { border-color: rgba(var(--accent-glow), 0.3); background: rgba(var(--accent-glow), 0.06); }
+  .seg-card .sl { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
+  .seg-card .sv { font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+  .seg-card.shop .sv { color: var(--accent-2); }
+
+  /* How it works ------------------------------------------------------- */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    counter-reset: step;
+  }
+  .step {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 36px 30px;
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1;
+    background: linear-gradient(180deg, var(--accent-2) 0%, rgba(var(--accent-glow), 0.2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+  .step h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .step p {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+
+  /* Pricing ------------------------------------------------------------ */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .plan {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 32px 30px;
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .plan.featured {
+    border-color: rgba(var(--accent-glow), 0.4);
+    background: linear-gradient(180deg, rgba(var(--accent-glow), 0.08) 0%, var(--bg-2) 60%);
+    box-shadow:
+      0 0 0 1px rgba(var(--accent-glow), 0.15),
+      0 0 60px rgba(var(--accent-glow), 0.15);
+  }
+  .plan-tag {
+    position: absolute; top: 16px; right: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    color: #1a0a00;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .plan h3 { margin: 0 0 4px; font-size: 16px; font-weight: 600; color: var(--text); }
+  .plan .plan-desc { color: var(--text-dim); font-size: 13px; margin-bottom: 24px; }
+  .plan .price { font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; margin-bottom: 6px; }
+  .plan .price .currency { font-size: 18px; color: var(--text-dim); margin-right: 4px; vertical-align: top; line-height: 1.6; }
+  .plan .price .num { font-size: 48px; font-weight: 600; letter-spacing: -0.02em; }
+  .plan .price .per { font-size: 14px; color: var(--text-dim); margin-left: 4px; }
+  .plan .price-note { color: var(--text-dimmer); font-size: 12px; margin-bottom: 24px; }
+  .plan ul {
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 24px 0 0;
+    border-top: 1px solid var(--line);
+    display: flex; flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+  .plan ul li {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.45;
+  }
+  .plan ul li::before {
+    content: "";
+    width: 16px; height: 16px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3 8.5l3 3 7-7' fill='none' stroke='%23ff8a3d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+  }
+  .plan ul li.dim { color: var(--text-dimmer); }
+  .plan ul li.dim::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3 8h10' fill='none' stroke='%235b6486' stroke-width='2' stroke-linecap='round'/></svg>");
+  }
+  .plan .btn { justify-content: center; width: 100%; }
+
+  /* CTA ---------------------------------------------------------------- */
+  .cta-section { padding: 60px 0 100px; }
+  .cta-card {
+    position: relative;
+    background:
+      radial-gradient(ellipse at top, rgba(var(--accent-glow), 0.28) 0%, transparent 60%),
+      linear-gradient(180deg, #0e1530 0%, #060a17 100%);
+    border: 1px solid var(--line-2);
+    border-radius: 28px;
+    padding: 80px 40px;
+    text-align: center;
+    overflow: hidden;
+    box-shadow: 0 0 80px rgba(var(--accent-glow), 0.15);
+  }
+  .cta-card::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at top, rgba(0,0,0,1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-card > * { position: relative; z-index: 1; }
+  .cta-card h2 {
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-size: clamp(32px, 4.4vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  .cta-card p {
+    color: var(--text-dim);
+    font-size: 17px;
+    margin: 0 auto 32px;
+    max-width: 560px;
+  }
+  .cta-card .hero-cta { justify-content: center; margin-bottom: 18px; }
+  .cta-card .meta { font-size: 13px; color: var(--text-dimmer); }
+
+  /* Footer ------------------------------------------------------------- */
+  footer { border-top: 1px solid var(--line); padding: 50px 0 36px; color: var(--text-dim); font-size: 14px; }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  .foot-grid h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dimmer);
+    margin: 0 0 14px;
+    font-weight: 500;
+  }
+  .foot-grid a {
+    display: block;
+    color: var(--text-dim);
+    text-decoration: none;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .foot-grid a:hover { color: var(--text); }
+  .foot-blurb { font-size: 13px; color: var(--text-dim); line-height: 1.6; max-width: 320px; margin-top: 12px; }
+  .foot-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+    font-size: 12px;
+    color: var(--text-dimmer);
+  }
+  .foot-bottom .links { display: flex; gap: 18px; }
+  .foot-bottom a { color: inherit; text-decoration: none; }
+  .foot-bottom a:hover { color: var(--text); }
+
+  /* Responsive --------------------------------------------------------- */
+  @media (max-width: 960px) {
+    .container { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; gap: 40px; text-align: center; padding: 50px 0 40px; }
+    .hero-text { max-width: none; margin: 0 auto; }
+    .hero-cta, .hero-meta { justify-content: center; }
+    .phone-stage { height: 600px; }
+    .phone { width: 280px; height: 580px; }
+    .fc-notif { left: -10px; width: 180px; }
+    .fc-summary { right: -10px; width: 180px; }
+    .features { grid-template-columns: repeat(2, 1fr); }
+    .feat, .feat.wide { grid-column: span 1; }
+    .feat.full { grid-column: span 2; }
+    .steps { grid-template-columns: 1fr; }
+    .pricing { grid-template-columns: 1fr; }
+    .compare { grid-template-columns: 1fr; }
+    .audience-row { grid-template-columns: repeat(2, 1fr); }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+    .cta-card { padding: 60px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-fx" aria-hidden="true">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============= NAV ============= -->
+  <nav class="top">
+    <div class="container nav-inner">
+      <div class="logo">
+        <span class="logo-mark">฿</span>
+        เงิน<span class="dot-accent">ร้าน</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features">ฟีเจอร์</a>
+        <a href="#how">วิธีใช้งาน</a>
+        <a href="#pricing">ราคา</a>
+        <a href="#">เคสร้านค้า</a>
+        <a href="#">เข้าสู่ระบบ</a>
+      </div>
+      <div>
+        <a href="#cta" class="btn btn-primary">โหลดฟรี
+          <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============= HERO ============= -->
+  <header class="container hero">
+    <div class="hero-text">
+      <div class="eyebrow">
+        <b>FOR THAI SHOPS</b>
+        ผู้ช่วยจัดระเบียบการเงินร้าน
+      </div>
+      <h1 class="hero-title">
+        ขายทุกวัน<br/>
+        แต่ไม่รู้ <span class="glow-text">เงินไปไหน?</span>
+      </h1>
+      <p class="hero-sub">เงินร้าน รวมยอดทุกบัญชี รายรับ–รายจ่าย และกำไรเบื้องต้น ของร้านคุณ
+ไว้ในที่เดียว —   ใช้ง่าย   ไม่ต้องเก่งบัญชี</p>
+      <div class="hero-cta">
+        <a href="#cta" class="btn btn-primary btn-lg">เริ่มใช้ฟรี
+          <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#features" class="btn btn-ghost btn-lg">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="4,3 13,8 4,13" fill="currentColor"/></svg>
+          ดูตัวอย่างหน้าจอ
+        </a>
+      </div>
+      <div class="hero-meta">
+        <span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg> ไม่ต้องเก่งบัญชี</span>
+        <span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg> รวมหลายบัญชีธนาคาร</span>
+        <span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg> ใช้บนมือถือเลย</span>
+      </div>
+    </div>
+
+    <!-- Phone mockup -->
+    <div class="phone-stage">
+
+      <!-- Floating notification card -->
+      <div class="float-card fc-notif">
+        <div class="nh">
+          <span class="nd">K</span>
+          <span>บันทึกรายรับ</span>
+        </div>
+        <div class="title">รับโอนจาก shopee</div>
+        <div class="amount">+ ฿ 1,290.00</div>
+        <div class="from">จาก K-PLUS · 098-xxx-4521</div>
+      </div>
+
+      <!-- Floating monthly summary -->
+      <div class="float-card fc-summary">
+        <div class="hl">สรุปสัปดาห์นี้</div>
+        <div class="ht">฿ 42,180 <span style="color:#6dd49a;font-size:11px;font-weight:500;">↑ 18%</span></div>
+        <div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="stat-row"><span>กำไรเบื้องต้น</span><b>฿ 12,840</b></div>
+      </div>
+
+      <!-- Phone -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <div class="phone-status">
+            <span>9:41</span>
+            <span class="icons">
+              <svg width="14" height="10" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5" width="3" height="7" rx="0.5"/><rect x="9" y="2" width="3" height="10" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+              <svg width="14" height="10" viewBox="0 0 18 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 5c4-3 10-3 14 0M5 8c1.5-1.5 4.5-1.5 6 0"/><circle cx="9" cy="10.5" r="1" fill="currentColor"/></svg>
+              <svg width="18" height="10" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="0.5" y="0.5" width="16" height="11" rx="2"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor"/><rect x="17.5" y="4" width="1.5" height="4" rx="0.5" fill="currentColor"/></svg>
+            </span>
+          </div>
+
+          <div class="phone-content">
+            <div class="ph-greet">
+              <div>
+                <div class="h">สวัสดีค่ะ</div>
+                <div class="n">ร้านดอกไม้พี่นิด 🌷</div>
+              </div>
+              <div class="av">น</div>
+            </div>
+
+            <div class="ph-balance">
+              <div class="lbl">ยอดเงินทุกบัญชี · เดือนนี้</div>
+              <div class="val"><span class="c">฿</span>168,420</div>
+              <div class="meta">
+                <span>กำไรเบื้องต้น <b>฿ 38,720</b></span>
+              </div>
+            </div>
+
+            <div class="ph-banks">
+              <div class="ph-bank">
+                <div class="b-row">
+                  <span class="b-dot scb">S</span>
+                  <span class="b-name">SCB</span>
+                </div>
+                <div class="b-val">฿ 82,140</div>
+              </div>
+              <div class="ph-bank">
+                <div class="b-row">
+                  <span class="b-dot kbk">K</span>
+                  <span class="b-name">KBank</span>
+                </div>
+                <div class="b-val">฿ 64,580</div>
+              </div>
+              <div class="ph-bank">
+                <div class="b-row">
+                  <span class="b-dot bbl">B</span>
+                  <span class="b-name">BBL</span>
+                </div>
+                <div class="b-val">฿ 21,700</div>
+              </div>
+            </div>
+
+            <div class="ph-section-h">
+              <b>รายการล่าสุด</b>
+              <span class="see">ดูทั้งหมด</span>
+            </div>
+
+            <div class="ph-txn-list">
+              <div class="ph-txn">
+                <div class="ico">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 12V4M4 8l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <div class="t-name">โอนเข้า · K-PLUS</div>
+                  <div class="t-sub">14:23 · พวงหรีดงานคุณนิภา</div>
+                </div>
+                <div class="t-amt">+ ฿1,290</div>
+              </div>
+              <div class="ph-txn">
+                <div class="ico">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 12V4M4 8l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <div class="t-name">SCB Easy · เงินเข้า</div>
+                  <div class="t-sub">13:08 · ช่อกุหลาบสีชมพู</div>
+                </div>
+                <div class="t-amt">+ ฿850</div>
+              </div>
+              <div class="ph-txn out">
+                <div class="ico">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4v8M4 8l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <div class="t-name">ค่าดอกไม้ส่ง</div>
+                  <div class="t-sub">11:42 · ตลาดปากคลอง</div>
+                </div>
+                <div class="t-amt">- ฿2,400</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ph-tabbar">
+            <div class="ph-tab on">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12L12 4l9 8M5 10v10h14V10" stroke-linejoin="round"/></svg>
+              <span>หน้าหลัก</span>
+            </div>
+            <div class="ph-tab">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg>
+              <span>รายการ</span>
+            </div>
+            <div class="ph-tab">
+              <div class="add-btn">
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3v10M3 8h10" stroke-linecap="round"/></svg>
+              </div>
+              <span style="margin-top:2px">เพิ่ม</span>
+            </div>
+            <div class="ph-tab">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18l5-5 4 4 8-9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>สรุป</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============= AUDIENCE ============= -->
+  <section class="audience container" style="padding-top:50px;padding-bottom:30px;">
+    <div class="audience-label">— ออกแบบสำหรับร้านค้าไทย —</div>
+    <div class="audience-row">
+      <div class="aud">
+        <div class="icn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="14" rx="1.5"/><path d="M8 6V4h8v2M3 11h18"/></svg>
+        </div>
+        <div class="lbl">แม่ค้าออนไลน์</div>
+      </div>
+      <div class="aud">
+        <div class="icn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="6"/><path d="M12 15v6M9 21h6" stroke-linecap="round"/></svg>
+        </div>
+        <div class="lbl">ร้านขายปลีก</div>
+      </div>
+      <div class="aud">
+        <div class="icn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3c2 2 2 5 0 7M12 3c-2 2-2 5 0 7M12 10c3 0 5 2 5 5M12 10c-3 0-5 2-5 5" stroke-linecap="round"/><circle cx="12" cy="10" r="2"/><path d="M12 12v9"/></svg>
+        </div>
+        <div class="lbl">ร้านขายส่ง</div>
+      </div>
+      <div class="aud">
+        <div class="icn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l2-5h14l2 5M3 9v11h18V9M3 9h18M8 13h8"/></svg>
+        </div>
+        <div class="lbl">ร้านขายของทั่วไป</div>
+      </div>
+      <div class="aud">
+        <div class="icn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="8" height="12" rx="1.5"/><rect x="13" y="6" width="8" height="12" rx="1.5"/><path d="M7 10v4M17 10v4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="lbl">ร้านรับโอนหลายบัญชี</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= COMPARE: BEFORE vs AFTER ============= -->
+  <section class="container">
+    <div class="sec-head">
+      <div class="sec-eyebrow">PAIN → SOLUTION</div>
+      <h2 class="sec-title">จากวุ่นวายทุกวัน <em>เป็นชัดเจนในที่เดียว</em></h2>
+      <p class="sec-sub">ที่ผ่านมา เจ้าของร้านต้องเปิดหลายแอป   ไล่หาสลิป  จดมือ  และจำยอดเอง
+เงินร้านรวมทุกอย่างไว้ในแอปเดียว</p>
+    </div>
+
+    <div class="compare">
+      <div class="compare-col before">
+        <h3>// แบบเดิม</h3>
+        <div class="h-line">"ขายเยอะ แต่งงว่าเงินอยู่ที่ไหน"</div>
+        <ul>
+          <li><span class="mk"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"/></svg></span>เปิดแอปธนาคาร 3–4 แอปเช็คยอด</li>
+          <li><span class="mk"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"/></svg></span>จดรายรับ-รายจ่ายลงสมุด แล้วลืม</li>
+          <li><span class="mk"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"/></svg></span>เงินร้านปนเงินส่วนตัวจนแยกไม่ออก</li>
+          <li><span class="mk"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"/></svg></span>ไม่รู้ว่ากำไรจริง ๆ เดือนนี้เท่าไร</li>
+          <li><span class="mk"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"/></svg></span>ตามหาสลิปการโอนของลูกค้าทั้งวัน</li>
+        </ul>
+      </div>
+      <div class="compare-col after">
+        <h3>// เงินร้าน</h3>
+        <div class="h-line">"เปิดแอปทีเดียว เห็นภาพรวมร้านทันที"</div>
+        <ul>
+          <li><span class="mk"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8.5l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>รวมทุกบัญชีธนาคารในที่เดียว</li>
+          <li><span class="mk"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8.5l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>บันทึกรายรับ-รายจ่ายไม่กี่วินาที</li>
+          <li><span class="mk"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8.5l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>แยกเงินร้านกับเงินส่วนตัวอัตโนมัติ</li>
+          <li><span class="mk"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8.5l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>เห็นกำไรเบื้องต้นรายวัน-รายเดือน</li>
+          <li><span class="mk"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8.5l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>ตรวจสอบยอดโอนได้ทันทีไม่ต้องไล่หาสลิป</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= FEATURES ============= -->
+  <section id="features" class="container">
+    <div class="sec-head">
+      <div class="sec-eyebrow">ฟีเจอร์</div>
+      <h2 class="sec-title">ทุกอย่างที่ร้านคุณต้องการ <em>ในแอปเดียว</em></h2>
+      <p class="sec-sub">ออกแบบให้คนทั่วไปใช้ได้   ไม่ต้องเก่งบัญชี  ปุ่มใหญ่  อ่านง่าย </p>
+    </div>
+
+    <div class="features">
+      <!-- 1. รวมหลายบัญชี - wide -->
+      <div class="feat wide">
+        <div class="feat-num">01</div>
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="5" width="9" height="6" rx="1"/>
+            <rect x="13" y="5" width="9" height="6" rx="1"/>
+            <rect x="2" y="13" width="9" height="6" rx="1"/>
+            <rect x="13" y="13" width="9" height="6" rx="1"/>
+          </svg>
+        </div>
+        <h3>รวมทุกบัญชีธนาคารในที่เดียว</h3>
+        <p>SCB, KBank, BBL, KTB และอีกหลายแบงก์ — ดูยอดเงินคงเหลือและรายการโอนของทุกบัญชีในหน้าจอเดียว ไม่ต้องเปิดสลับแอปไปมาอีกต่อไป</p>
+        <div class="feat-visual">
+          <div class="multi-bank-mini">
+            <div class="mb-row">
+              <span class="b-dot" style="background:#4f288c;">SCB</span>
+              <span><span class="b-name">SCB ออมทรัพย์</span><div class="b-acc">xxx-x-12345-6</div></span>
+              <span class="b-val">฿ 82,140</span>
+            </div>
+            <div class="mb-row">
+              <span class="b-dot" style="background:#138f4a;">K</span>
+              <span><span class="b-name">KBank กรุงเทพฯ</span><div class="b-acc">xxx-x-67890-1</div></span>
+              <span class="b-val">฿ 64,580</span>
+            </div>
+            <div class="mb-row">
+              <span class="b-dot" style="background:#1a4ba8;">BBL</span>
+              <span><span class="b-name">Bangkok Bank</span><div class="b-acc">xxx-x-23456-7</div></span>
+              <span class="b-val">฿ 21,700</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. กำไรเบื้องต้น - wide -->
+      <div class="feat wide">
+        <div class="feat-num">02</div>
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2a10 10 0 1 0 10 10" stroke-linecap="round"/>
+            <path d="M12 2v10l7 7" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>ดูกำไรเบื้องต้นทันที</h3>
+        <p>รายรับ ลบ รายจ่าย = กำไรจริง ๆ — รู้เลยว่า "ขายเยอะ แต่เหลือเงินเท่าไร" ไม่ต้องคำนวณเอง</p>
+        <div class="feat-visual">
+          <div class="profit-pie-area">
+            <div class="profit-pie">
+              <svg viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgb(255,138,61)" stroke-width="4"
+                  stroke-dasharray="68 100" stroke-linecap="round"
+                  style="filter:drop-shadow(0 0 4px rgba(255,138,61,0.6))"/>
+              </svg>
+              <div class="center">68%</div>
+            </div>
+            <div class="legend-row">
+              <div class="lg-item"><span class="sw in"></span>รายรับ · <b>฿ 168,420</b></div>
+              <div class="lg-item"><span class="sw out"></span>รายจ่าย · <b>฿ 129,700</b></div>
+              <div class="lg-item" style="color:var(--accent-2);font-weight:500;margin-top:4px;">กำไรเบื้องต้น · <b style="color:var(--accent-2);">฿ 38,720</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. บันทึกง่าย -->
+      <div class="feat">
+        <div class="feat-num">03</div>
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M5 4h11l3 3v13H5z" stroke-linejoin="round"/>
+            <path d="M9 12h6M9 16h6M9 8h2"/>
+          </svg>
+        </div>
+        <h3>บันทึกรายรับ-รายจ่ายใน 3 วิ</h3>
+        <p>กดปุ่มเดียว ใส่จำนวนเงิน เลือกหมวด เสร็จ</p>
+        <div class="feat-visual">
+          <div class="ledger-mini">
+            <div class="l-row"><span class="desc"><b>ขายกล่อง</b> · 14:23</span><span class="v in">+ 850</span></div>
+            <div class="l-row"><span class="desc">ค่าวัตถุดิบ · 11:42</span><span class="v out">− 2,400</span></div>
+            <div class="l-row"><span class="desc"><b>ยอด shopee</b> · 09:15</span><span class="v in">+ 1,290</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. ตรวจสอบยอดโอน -->
+      <div class="feat">
+        <div class="feat-num">04</div>
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="6" width="18" height="13" rx="2"/>
+            <path d="M3 10h18M7 15h5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>ตรวจสอบยอดโอนทันที</h3>
+        <p>ลูกค้าโอนแล้วเด้งขึ้นแอป ไม่ต้องไล่หาสลิป</p>
+        <div class="feat-visual">
+          <div class="qr-pad">
+            <div class="qr-grid">
+              <i></i><i></i><i></i><i class="off"></i><i></i><i></i><i></i>
+              <i></i><i class="off"></i><i></i><i></i><i></i><i class="off"></i><i></i>
+              <i></i><i></i><i class="off"></i><i></i><i class="off"></i><i></i><i></i>
+              <i class="off"></i><i></i><i></i><i class="off"></i><i></i><i></i><i class="off"></i>
+              <i></i><i></i><i class="off"></i><i></i><i></i><i class="off"></i><i></i>
+              <i></i><i class="off"></i><i></i><i></i><i class="off"></i><i></i><i></i>
+              <i></i><i></i><i></i><i class="off"></i><i></i><i></i><i></i>
+            </div>
+            <div class="qr-info">
+              <div class="ql">เงินเข้าล่าสุด</div>
+              <div class="qa">฿ 1,290.00</div>
+              <div class="qb">● ตรวจสอบแล้ว · K-PLUS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. สรุปรายวัน/รายเดือน -->
+      <div class="feat">
+        <div class="feat-num">05</div>
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="6" width="18" height="14" rx="1.5"/>
+            <path d="M3 10h18M8 4v4M16 4v4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>สรุปรายวัน · รายเดือน</h3>
+        <p>เห็นยอดและกำไรย้อนหลังแบบเข้าใจง่าย</p>
+        <div class="feat-visual">
+          <div class="month-bars">
+            <i style="height:30%"></i><i style="height:45%"></i><i style="height:38%"></i><i style="height:60%"></i>
+            <i style="height:55%"></i><i style="height:72%"></i><i style="height:68%"></i><i style="height:82%"></i>
+            <i style="height:75%"></i><i style="height:90%"></i><i style="height:85%"></i><i class="live" style="height:100%"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. แยกเงินร้าน vs ส่วนตัว -->
+      <div class="feat">
+        <div class="feat-num">06</div>
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="8" height="18" rx="1.5"/>
+            <rect x="13" y="3" width="8" height="18" rx="1.5"/>
+          </svg>
+        </div>
+        <h3>แยกเงินร้าน · เงินส่วนตัว</h3>
+        <p>จัดระเบียบไม่ให้เงินสองก้อนปนกัน</p>
+        <div class="feat-visual">
+          <div class="seg-mini">
+            <div class="seg-card shop">
+              <div class="sl">เงินร้าน</div>
+              <div class="sv">฿ 168,420</div>
+            </div>
+            <div class="seg-card">
+              <div class="sl">ส่วนตัว</div>
+              <div class="sv">฿ 24,300</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= HOW IT WORKS ============= -->
+  <section id="how" class="container">
+    <div class="sec-head">
+      <div class="sec-eyebrow">วิธีใช้งาน</div>
+      <h2 class="sec-title">เริ่มจัดระเบียบเงินร้าน <em>ใน 3 ขั้นตอน</em></h2>
+      <p class="sec-sub">ไม่ต้องเก่งเทคโนโลยี ไม่ต้องเขียนโค้ด เปิดแอปแล้วใช้งานได้เลย</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>โหลดแอปและเชื่อมบัญชี</h3>
+        <p>ใส่บัญชีธนาคารทุกใบที่ร้านใช้รับเงิน — รองรับทั้ง SCB, KBank, BBL, KTB และอีกหลายแบงก์</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>บันทึกรายรับ-รายจ่าย</h3>
+        <p>กดปุ่ม + ตรงกลาง ใส่จำนวนเงิน เลือกหมวด เสร็จในไม่กี่วินาที — ระบบจดให้อัตโนมัติเมื่อมีเงินเข้า</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>เห็นภาพรวมร้านทันที</h3>
+        <p>เปิดหน้าหลักเจอกำไรวันนี้ ยอดเงินทุกบัญชี และรายการล่าสุด พร้อมสรุปรายเดือนแบบเข้าใจง่าย</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= PRICING ============= -->
+  <section id="pricing" class="container">
+    <div class="sec-head">
+      <div class="sec-eyebrow">ราคา</div>
+      <h2 class="sec-title">เริ่มต้น <em>ฟรี</em> ไม่มีค่าบริการแอบแฝง</h2>
+      <p class="sec-sub">เลือกแพ็กเกจที่เหมาะกับร้านคุณ ยกเลิกได้ทุกเมื่อ ไม่มีสัญญาผูกมัด</p>
+    </div>
+
+    <div class="pricing">
+      <div class="plan">
+        <h3>Free</h3>
+        <div class="plan-desc">เหมาะกับร้านที่เพิ่งเริ่มต้น</div>
+        <div class="price"><span class="currency">฿</span><span class="num">0</span><span class="per">/ ตลอดชีพ</span></div>
+        <div class="price-note">ใช้ได้ทุกฟีเจอร์พื้นฐาน</div>
+        <ul>
+          <li>เชื่อมได้ 2 บัญชีธนาคาร</li>
+          <li>บันทึกรายการไม่จำกัด</li>
+          <li>สรุปรายวัน-รายเดือน</li>
+          <li>กำไรเบื้องต้น</li>
+          <li class="dim">รายงาน Export PDF</li>
+          <li class="dim">แยกเงินร้าน-ส่วนตัว</li>
+        </ul>
+        <a href="#" class="btn btn-ghost btn-lg">โหลดฟรีเลย</a>
+      </div>
+
+      <div class="plan featured">
+        <span class="plan-tag">แนะนำ</span>
+        <h3>Pro</h3>
+        <div class="plan-desc">สำหรับร้านที่จริงจังเรื่องการเงิน</div>
+        <div class="price"><span class="currency">฿</span><span class="num">149</span><span class="per">/ เดือน</span></div>
+        <div class="price-note">หรือ ฿1,490/ปี (ประหยัด 17%)</div>
+        <ul>
+          <li>ทุกอย่างใน Free</li>
+          <li>เชื่อมบัญชีไม่จำกัด</li>
+          <li>แยกเงินร้าน-ส่วนตัวอัตโนมัติ</li>
+          <li>Export PDF/Excel ส่งผู้สอบบัญชี</li>
+          <li>แจ้งเตือนเงินเข้าทุกบัญชี</li>
+          <li>สำรองข้อมูลบนคลาวด์</li>
+        </ul>
+        <a href="#" class="btn btn-primary btn-lg">ทดลอง Pro ฟรี 14 วัน</a>
+      </div>
+
+      <div class="plan">
+        <h3>Business</h3>
+        <div class="plan-desc">ร้านที่มีหลายสาขา หรือทีมงาน</div>
+        <div class="price"><span class="currency">฿</span><span class="num">399</span><span class="per">/ เดือน</span></div>
+        <div class="price-note">หรือ ฿3,990/ปี (ประหยัด 17%)</div>
+        <ul>
+          <li>ทุกอย่างใน Pro</li>
+          <li>หลายสาขา · หลายผู้ใช้</li>
+          <li>กำหนดสิทธิ์ผู้ใช้แต่ละคน</li>
+          <li>รายงานรวมทุกสาขา</li>
+          <li>API เชื่อมระบบอื่น</li>
+          <li>ทีมซัพพอร์ตเฉพาะ</li>
+        </ul>
+        <a href="#" class="btn btn-ghost btn-lg">ติดต่อทีมขาย</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= CTA ============= -->
+  <section id="cta" class="cta-section container">
+    <div class="cta-card">
+      <h2>เริ่มจัดระเบียบเงินร้านคุณ <em>ตั้งแต่วันนี้</em></h2>
+      <p>ทดลองใช้โหลดฟรี   ใช้ง่าย   ไม่ต้องเก่งบัญชี  ก็เริ่มใช้ได้</p>
+      <div class="hero-cta">
+        <a href="#" class="btn btn-primary btn-lg">โหลดฟรีเลย
+          <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" class="btn btn-ghost btn-lg">ดูเดโม</a>
+      </div>
+      <div class="meta"> ไม่มีค่าใช้จ่ายแอบแฝง</div>
+    </div>
+  </section>
+
+  <!-- ============= FOOTER ============= -->
+  <footer>
+    <div class="container">
+      <div class="foot-grid">
+        <div>
+          <div class="logo">
+            <span class="logo-mark">฿</span>
+            เงิน<span class="dot-accent">ร้าน</span>
+          </div>
+          <p class="foot-blurb">ผู้ช่วยจัดระเบียบการเงินร้านสำหรับแม่ค้าไทย — รวมบัญชี ดูกำไร จัดการรายรับรายจ่าย ง่าย ๆ บนมือถือเครื่องเดียว</p>
+        </div>
+        <div>
+          <h4>ผลิตภัณฑ์</h4>
+          <a href="#">ฟีเจอร์</a>
+          <a href="#">ราคา</a>
+          <a href="#">โหลดแอป</a>
+          <a href="#">Roadmap</a>
+        </div>
+        <div>
+          <h4>ทรัพยากร</h4>
+          <a href="#">คู่มือเริ่มต้น</a>
+          <a href="#">บล็อก</a>
+          <a href="#">เคสร้านค้า</a>
+          <a href="#">คำถามที่พบบ่อย</a>
+        </div>
+        <div>
+          <h4>บริษัท</h4>
+          <a href="#">เกี่ยวกับเรา</a>
+          <a href="#">ติดต่อ</a>
+          <a href="#">ร่วมงานกับเรา</a>
+          <a href="#">ข่าวสาร</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <div>© 2026 เงินร้าน  ::  เงินร้าน  ไม่จำกัด</div>
+        <div class="links">
+          <a href="#">นโยบายความเป็นส่วนตัว</a>
+          <a href="#">เงื่อนไขการใช้งาน</a>
+          <a href="#">PDPA</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

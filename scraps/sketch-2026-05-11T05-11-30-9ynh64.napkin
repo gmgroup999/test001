@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "created": "2026-05-11T05:11:30.273Z",
+  "modified": "2026-05-11T05:12:09.462Z",
+  "objects": [
+    {
+      "id": "dp56lej43",
+      "type": "text",
+      "x": 159,
+      "y": 193,
+      "data": {
+        "content": "Landing page สำหรับ SaaS ระบบช่วยร้านค้าไทย\n\nธีม dark mode แบบ modern AI startup\n\nสไตล์ premium คล้ายเว็บไซต์ AI startup สมัยใหม่\n\nมี:\n- hero section\n- feature cards\n- dashboard preview\n- pricing\n- CTA section\n\nโทนสี:\nน้ำเงินเข้ม + glow สีส้ม\n\nความรู้สึก:\nmodern, futuristic, premium, simple",
+        "fontSize": 16,
+        "color": "#8B2500",
+        "bold": false
+      },
+      "width": 146,
+      "height": 520
+    }
+  ]
+}
